@@ -126,3 +126,9 @@ print("Boîtier généré.")
 print("------------------------------------")
 
 from Export import ExportManager
+
+from GerberParser import GerberParser
+
+parser = GerberParser("../Gerbers")
+
+files = parser.load()
