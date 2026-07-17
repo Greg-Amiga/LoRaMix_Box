@@ -212,3 +212,149 @@ def move(shape,
     )
 
     return shape
+
+
+# ==========================================================
+# Congés
+# ==========================================================
+
+def apply_fillet(shape, radius):
+
+    edges = []
+
+    for edge in shape.Edges:
+        edges.append((edge, radius))
+
+    try:
+        return shape.makeFillet(radius, [e for e in shape.Edges])
+    except Exception:
+        return shape
+
+
+# ==========================================================
+# Chanfreins
+# ==========================================================
+
+def apply_chamfer(shape, size):
+
+    try:
+        return shape.makeChamfer(size, shape.Edges)
+    except Exception:
+        return shape
+
+
+# ==========================================================
+# Boîte à coins arrondis
+# ==========================================================
+
+def rounded_box(length,
+                width,
+                height,
+                radius):
+
+    box = Part.makeBox(
+        length,
+        width,
+        height
+    )
+
+    return apply_fillet(
+        box,
+        radius
+    )
+
+
+# ==========================================================
+# Clip simple
+# ==========================================================
+
+def make_clip(length=8,
+              width=3,
+              height=5):
+
+    clip = Part.makeBox(
+        length,
+        width,
+        height
+    )
+
+    return clip
+
+
+# ==========================================================
+# Crochet clipsable
+# ==========================================================
+
+def make_snap_hook():
+
+    base = Part.makeBox(
+        8,
+        3,
+        5
+    )
+
+    tooth = Part.makeBox(
+        2,
+        3,
+        2
+    )
+
+    tooth.translate(
+        App.Vector(
+            6,
+            0,
+            3
+        )
+    )
+
+    return base.fuse(
+        tooth
+    )
+
+
+# ==========================================================
+# Nid d'abeille
+# ==========================================================
+
+def make_honeycomb(
+        rows,
+        cols,
+        radius,
+        height,
+        spacing):
+
+    cells = []
+
+    dx = radius * 1.75
+    dy = radius * 1.52
+
+    for row in range(rows):
+
+        for col in range(cols):
+
+            cell = Part.makeCylinder(
+                radius,
+                height,
+                App.Vector(),
+                App.Vector(0,0,1),
+                6
+            )
+
+            x = col * dx
+
+            if row % 2:
+                x += dx / 2
+
+            y = row * dy
+
+            cell.translate(
+                App.Vector(
+                    x,
+                    y,
+                    0
+                )
+            )
+
+            cells.append(cell)
+
+    return cells
