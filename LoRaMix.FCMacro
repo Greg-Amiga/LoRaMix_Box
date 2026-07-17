@@ -115,8 +115,14 @@ obj.Shape = lid
 
 doc.recompute()
 
+exporter = ExportManager(doc)
+
+exporter.export_all()
+
 Gui.ActiveDocument.ActiveView.fitAll()
 
 print("------------------------------------")
 print("Boîtier généré.")
 print("------------------------------------")
+
+from Export import ExportManager
