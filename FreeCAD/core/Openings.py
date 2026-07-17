@@ -64,9 +64,9 @@ class OpeningBuilder:
 
     # --------------------------------------------------
 
-    def build(self, board):
+    def build(self, pcb.openings):
 
-        for opening in board["openings"]:
+        for opening in pcb.openings["openings"]:
 
             if opening["type"] == "RJ45":
 
