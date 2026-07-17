@@ -1,0 +1,122 @@
+"""
+==========================================================
+ LoRaMix_Box
+ Macro principale FreeCAD
+==========================================================
+
+Auteur :
+Greg-Amiga
+
+Version :
+0.1
+"""
+
+import os
+import sys
+
+import FreeCAD as App
+import FreeCADGui as Gui
+import Part
+
+# ---------------------------------------------------------
+# Localisation du projet
+# ---------------------------------------------------------
+
+PROJECT = os.path.dirname(__file__)
+
+sys.path.append(PROJECT)
+
+sys.path.append(os.path.join(PROJECT, "config"))
+sys.path.append(os.path.join(PROJECT, "core"))
+sys.path.append(os.path.join(PROJECT, "boards"))
+
+# ---------------------------------------------------------
+# Imports
+# ---------------------------------------------------------
+
+from Parameters import *
+
+from Base import BaseBuilder
+from Lid import LidBuilder
+from Openings import OpeningBuilder
+
+from LoRaMix import BOARD
+
+# ---------------------------------------------------------
+# Nouveau document
+# ---------------------------------------------------------
+
+DOC_NAME = "LoRaMix_Box"
+
+try:
+    App.closeDocument(DOC_NAME)
+except:
+    pass
+
+doc = App.newDocument(DOC_NAME)
+
+print("------------------------------------")
+print("LoRaMix Box Generator")
+print("------------------------------------")
+
+# ---------------------------------------------------------
+# Base
+# ---------------------------------------------------------
+
+print("Création de la base...")
+
+base = BaseBuilder().build()
+
+# ---------------------------------------------------------
+# Ouvertures
+# ---------------------------------------------------------
+
+print("Création des ouvertures...")
+
+base = OpeningBuilder(base).build(BOARD)
+
+# ---------------------------------------------------------
+# Affichage Base
+# ---------------------------------------------------------
+
+obj = doc.addObject(
+    "Part::Feature",
+    "Base"
+)
+
+obj.Shape = base
+
+# ---------------------------------------------------------
+# Couvercle
+# ---------------------------------------------------------
+
+print("Création du couvercle...")
+
+lid = LidBuilder().build()
+
+lid.translate(
+    App.Vector(
+        BOX_LENGTH + 15,
+        0,
+        0
+    )
+)
+
+obj = doc.addObject(
+    "Part::Feature",
+    "Lid"
+)
+
+obj.Shape = lid
+
+# ---------------------------------------------------------
+# Recalcul
+# ---------------------------------------------------------
+
+doc.recompute()
+
+Gui.ActiveDocument.ActiveView.fitAll()
+
+print("------------------------------------")
+print("Boîtier généré.")
+print("------------------------------------")
