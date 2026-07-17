@@ -31,8 +31,8 @@ class BaseBuilder:
     def create_shell(self):
 
         self.body = make_shell(
-            BOX_LENGTH,
-            BOX_WIDTH,
+            pcb.length
+            pcb.width
             BOX_HEIGHT - LID,
             WALL,
             BOTTOM
