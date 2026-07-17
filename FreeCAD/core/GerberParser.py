@@ -11,54 +11,26 @@ Les méthodes d'analyse seront complétées
 progressivement.
 """
 
-from pathlib import Path
-
+from Board import PCB
 
 class GerberParser:
 
-    def __init__(self, folder):
+    def parse(self):
 
-        self.folder = Path(folder)
+        pcb = PCB()
 
-        self.outline = None
-        self.drill = None
+        pcb.name = "LoRaMix"
 
-    # ---------------------------------------------------------
+        #
+        # V2
+        # Lecture du contour
+        #
 
-    def locate_files(self):
+        #
+        # V3
+        # Lecture des trous
+        #
 
-        for f in self.folder.iterdir():
-
-            suffix = f.suffix.upper()
-
-            if suffix == ".GKO":
-                self.outline = f
-
-            elif suffix == ".DRL":
-                self.drill = f
-
-    # ---------------------------------------------------------
-
-    def check(self):
-
-        if self.outline is None:
-            raise FileNotFoundError("BoardOutline (.GKO) absent")
-
-        if self.drill is None:
-            raise FileNotFoundError("Drill (.DRL) absent")
-
-    # ---------------------------------------------------------
-
-    def load(self):
-
-        self.locate_files()
-
-        self.check()
-
-        print("Outline :", self.outline)
-        print("Drill   :", self.drill)
-
-        return {
-            "outline": self.outline,
+        return pcb
             "drill": self.drill
         }
